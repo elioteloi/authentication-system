@@ -1,8 +1,13 @@
 const express = require("express");
+const app = express();
+require("dotenv").config();
+
 const cors = require("cors");
-const connection = require("../../config/db");
-const userController = require("../controllers/userController");
+const routes = require("./src/routes/users");
 const router = express.Router();
+const hostname = "127.0.0.1";
+
+const port = process.env.PORT;
 
 // Enable CORS for all routes
 router.use(cors());
@@ -13,8 +18,8 @@ router.use(express.json());
 // Parse URL-encoded bodies for POST requests
 router.use(express.urlencoded({ extended: true }));
 
-router.post("/dataGet", userController.createUser);
+app.use(routes);
 
-router.get("/dataPost", userController.fetchUser);
-
-module.exports = router;
+app.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
